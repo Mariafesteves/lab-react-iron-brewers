@@ -1,4 +1,6 @@
+import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AddBeerPage() {
   // State variables to store the values of the form inputs. You can leave these as they are.
@@ -21,6 +23,31 @@ function AddBeerPage() {
   const handleAttenuationLevel = (e) => setAttenuationLevel(e.target.value);
   const handleContributedBy = (e) => setContributedBy(e.target.value);
 
+  const navigate= useNavigate()
+
+  const handleSubmit= (e)=> {
+    e.preventDefault()
+
+    const newBeer= {
+      name: name,
+      tagline: tagline,
+      description: description,
+      image_url: imageUrl,
+      first_brewed: firstBrewed,
+      brewers_tips: brewersTips,
+      attenuation_level: attenuationLevel,
+      contributed_by: contributedBy,
+    }
+
+    axios.post("https://ih-beers-api2.herokuapp.com/beers/new", newBeer)
+    .then(()=>{
+      navigate("/")
+    })
+    .catch((e)=>{
+      console.log("error")
+    })
+  }
+
 
 
   // TASK:
@@ -34,7 +61,7 @@ function AddBeerPage() {
   return (
     <>
       <div className="d-inline-flex flex-column w-100 p-4">
-        <form>
+        <form onSubmit={handleSubmit}>
           <label>Name</label>
           <input
             className="form-control mb-4"
